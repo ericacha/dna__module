@@ -1,0 +1,68 @@
+<?php
+
+function dna_menu() {
+    $items['dna'] = array(
+        'title' => 'DNA ',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('dna_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['dna_success'] = array(
+        'title' => 'DNA Results',
+        'page callback' => 'dna_form_success',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function dna_form() {
+    $form['sequence'] = array(
+        '#title' => 'Enter DNA:',
+        '#type' => 'textfield',
+        '#description' => t('Type in the letters A, T, C, G'),
+        // validate
+        '#required' => TRUE,
+    );
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Sequence',
+    );
+    return $form;
+}
+
+
+function sequence($input) {
+
+    $dna = str_split(strtoupper($input));
+    $return = '';
+
+    foreach($dna as $letter) {
+        if ($letter == 'A') {
+            $return = 'T';
+        }
+        if ($letter == 'T') {
+            $return = 'A';
+        }
+        if ($letter == 'G') {
+            $return = 'C';
+        }
+
+        if ($letter == 'C') {
+            $return = 'G';
+        }
+    }
+
+    return $return;
+}
+
+function dna_form_submit($form, &$form_state) {
+    $_SESSION['return'] = sequence($form_state['values']['sequence']);
+    $form_state['redirect'] = 'dna_success';
+}
+
+function dna_form_success() {
+    $return = $_SESSION['return'];
+    return "The matching nucleotides to your original DNA string are: " . $return;
+}

@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Functional tests for DNA module.
+ */
+
+class DnaTests extends DrupalWebTestCase {
+
+    public static function getInfo() {
+        return array(
+            'name' => 'DNA test',
+            'description' => 'A test converter',
+            'group' => 'Epicodus Examples Tests',
+        );
+    }
+
+    function testDnaSequence() {
+        $input = 'A';
+        $result = sequence($input);
+        $message = 'An input of A will return T';
+        $this->assertEqual($result, 'T');
+
+        $input = 'C';
+        $result = sequence($input);
+        $message = 'An input of C will return G';
+        $this->assertEqual($result, 'G');
+
+        $input = 'T';
+        $result = sequence($input);
+        $message = 'An input of T will return A';
+        $this->assertEqual($result, 'A');
+
+        $input = 'G';
+        $result = sequence($input);
+        $message = 'An input of G will return C';
+        $this->assertEqual($result, 'C');
+
+    }
+}
